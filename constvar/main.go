@@ -1,6 +1,14 @@
 package constvar
 
 var GroupUsersMap map[string][]string = make(map[string][]string)
+var WebHooks map[string][]string = make(map[string][]string)
+var NumberToEmoji map[int]string = map[int]string{
+	1: "🤓",
+	2: "🤩",
+	3: "😝",
+	4: "🥰",
+	5: "🤪",
+}
 
 func init() {
 	GroupUsersMap["backend"] = []string{
@@ -15,5 +23,11 @@ func init() {
 		"MitsuhaOma",    // 王雯坚
 		"kocoler",       // 张军洁
 		"JacksieCheung", // 张竣淇
+	}
+	WebHooks["push"] = []string{
+		"https://open.feishu.cn/open-apis/bot/hook/98fc59eb14d2405e880a6ab0fe70d136",
+	}
+	WebHooks["trending"] = []string{
+		"https://open.feishu.cn/open-apis/bot/hook/cb973deacb4a4ee699d8d049c51e6908",
 	}
 }

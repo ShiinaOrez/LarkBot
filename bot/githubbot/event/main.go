@@ -1,9 +1,11 @@
-package githubbot
+package event
 
 import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	lark "github.com/ShiinaOrez/LarkBot/bot"
+	"github.com/ShiinaOrez/LarkBot/bot/githubbot"
 	"github.com/ShiinaOrez/LarkBot/constvar"
 	"log"
 	"net/http"
@@ -13,11 +15,7 @@ import (
 	"time"
 )
 
-type GithubBot interface {
-	Run()
-}
-
-type Bot struct {
+type EventBot struct {
 	TargetUserList []string
 	Client         *http.Client
 	WebHookList    []string
@@ -61,12 +59,7 @@ func (r Results) Swap(i, j int) {
 	return
 }
 
-type BotMessage struct {
-	Title string `json:"title"`
-	Text  string `json:"text"`
-}
-
-func (bot Bot) getUserGithubEvents(username string) []Event {
+func (bot EventBot) getUserGithubEvents(username string) []Event {
 	resp, err := bot.Client.Get(fmt.Sprintf("https://api.github.com/users/%s/events", username))
 	if err != nil {
 		log.Println("[Github] [Request]", err.Error())
@@ -101,7 +94,7 @@ func countEvents(events []Event, today string) (pushTot, repoTot int) {
 	return
 }
 
-func (bot Bot) Run() {
+func (bot EventBot) Do() {
 	failed := 0
 	failLocker := sync.Mutex{}
 
@@ -137,7 +130,7 @@ func (bot Bot) Run() {
 	waitGroup.Wait()
 
 	sort.Sort(results)
-	newMsg := BotMessage{
+	newMsg := lark.Message{
 		Title: today + " | Github每日Push量统计",
 		Text: fmt.Sprintf("Tot: %d, Success: %d, fail: %d\n🎉",
 			len(bot.TargetUserList),
@@ -166,10 +159,20 @@ func (bot Bot) Run() {
 	return
 }
 
-func NewBot(groupName string) GithubBot {
-	return Bot{
+func (bot EventBot) Run(duration time.Duration) {
+	t := time.NewTicker(duration)
+	defer t.Stop()
+
+	for {
+		<-t.C
+		bot.Do()
+	}
+}
+
+func NewBot(groupName string) githubbot.GithubBot {
+	return EventBot{
 		TargetUserList: constvar.GroupUsersMap[groupName],
 		Client:         &http.Client{},
-		WebHookList:    []string{"https://open.feishu.cn/open-apis/bot/hook/98fc59eb14d2405e880a6ab0fe70d136"},
+		WebHookList:    constvar.WebHooks["push"],
 	}
 }

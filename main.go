@@ -1,19 +1,16 @@
 package main
 
 import (
-	"github.com/ShiinaOrez/LarkBot/githubbot"
+	"github.com/ShiinaOrez/LarkBot/bot/githubbot/event"
+	"github.com/ShiinaOrez/LarkBot/bot/githubbot/trending"
 	"time"
 )
 
 func main() {
-	githubBot := githubbot.NewBot("backend")
+	githubBot := event.NewBot("backend")
+	githubBot.Run(time.Duration(time.Hour * 24))
 
-	d := time.Duration(time.Hour * 24)
-	t := time.NewTicker(d)
-	defer t.Stop()
-
-	for {
-		<-t.C
-		githubBot.Run()
-	}
+	repoBot := trending.NewBot("go")
+	repoBot.Run(time.Duration(time.Hour * 24))
+	repoBot.Do()
 }
