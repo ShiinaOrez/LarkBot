@@ -1,3 +1,3 @@
-module github.com/ShiinaOrez/FeishuBot
+module github.com/ShiinaOrez/LarkBot
 
 go 1.12

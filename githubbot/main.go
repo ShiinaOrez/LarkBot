@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/ShiinaOrez/FeishuBot/constvar"
+	"github.com/ShiinaOrez/LarkBot/constvar"
 	"log"
 	"net/http"
 	"sort"
