@@ -3,14 +3,18 @@ package main
 import (
 	"github.com/ShiinaOrez/LarkBot/bot/githubbot/event"
 	"github.com/ShiinaOrez/LarkBot/bot/githubbot/trending"
-	"time"
+	"github.com/ShiinaOrez/LarkBot/timeTable"
 )
+
+var githubBotTimeTable = timeTable.NewTimeTable()
 
 func main() {
 	githubBot := event.NewBot("backend")
-	githubBot.Run(time.Duration(time.Hour * 24))
+	githubBotTimeTable.Hour(20).Append(githubBot)
 
 	repoBot := trending.NewBot("go")
-	repoBot.Run(time.Duration(time.Hour * 24))
-	repoBot.Do()
+	githubBotTimeTable.Hour(10).Append(repoBot)
+
+	githubBotTimeTable.Register()
+	githubBotTimeTable.Run()
 }
