@@ -14,8 +14,8 @@ type Worker struct {
 type Workers []Worker
 
 type TimeTable struct {
-	Map     map[int]githubbot.GBS
-	Workers Workers
+	Map     map[int]*githubbot.GBS
+	Workers *Workers
 }
 
 func getDuration(startHour int) time.Duration {
@@ -50,30 +50,28 @@ func (w Worker) Run() {
 	}
 }
 
-func (ws Workers) Append(worker Worker) {
-	if ws == nil {
-		ws = Workers{worker}
-	} else {
-		ws = append(ws, worker)
-	}
+func (ws *Workers) Append(worker Worker) {
+	*ws = append(*ws, worker)
 }
 
 func NewTimeTable() TimeTable {
-	return TimeTable{Map: make(map[int]githubbot.GBS), Workers: nil}
+	return TimeTable{Map: make(map[int]*githubbot.GBS), Workers: &Workers{}}
 }
 
-func (tt TimeTable) Hour(hour int) githubbot.GBS {
-	if gts, ok := tt.Map[hour]; ok {
-		return gts
+func (tt *TimeTable) Append(bot githubbot.GithubBot, startHour int) {
+	if _, ok := tt.Map[startHour]; !ok {
+		tt.Map[startHour] = &githubbot.GBS{bot}
+	} else {
+		tt.Map[startHour].Append(bot)
 	}
-	tt.Map[hour] = make(githubbot.GBS, 0)
-	return tt.Map[hour]
 }
 
 func (tt TimeTable) Register() {
+	log.Printf("%v\n", tt.Map)
 	for startHour, gbs := range tt.Map {
 		duration := getDuration(startHour)
-		for _, githubBot := range gbs {
+		for _, githubBot := range *gbs {
+			log.Println("[TimeTable] [Register] [Bot]")
 			tt.Workers.Append(Worker{
 				Bot: githubBot,
 				Fd:  duration,
@@ -83,7 +81,8 @@ func (tt TimeTable) Register() {
 }
 
 func (tt TimeTable) Run() {
-	for _, worker := range tt.Workers {
+	for _, worker := range *tt.Workers {
+		log.Println("[Worker] [Start]")
 		go worker.Run()
 	}
 	// 睡一年

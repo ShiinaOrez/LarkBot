@@ -8,7 +8,6 @@ import (
 	"github.com/ShiinaOrez/LarkBot/constvar"
 	"log"
 	"net/http"
-	"sort"
 	"time"
 )
 
@@ -61,7 +60,7 @@ func (bot RepoBot) getTop5Repos() []Repo {
 		log.Println("[Github] [Json]", err.Error())
 		return nil
 	}
-	sort.Sort(repos)
+	// sort.Sort(repos)
 	if len(repos.Data) > 5 {
 		repos.Data = repos.Data[:5]
 	}
@@ -110,13 +109,10 @@ func (bot RepoBot) Do() {
 }
 
 func (bot RepoBot) Run(duration time.Duration) {
-	t := time.NewTicker(duration)
-	defer t.Stop()
-
-	for {
-		<-t.C
-		bot.Do()
-	}
+	time.Sleep(duration)
+	log.Println("[Github] [Repo] [Bot] [TODO]")
+	bot.Do()
+	log.Println("[Github] [Push] [Bot] [Done]")
 }
 
 func NewBot(language string) RepoBot {

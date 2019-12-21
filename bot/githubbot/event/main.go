@@ -160,13 +160,10 @@ func (bot EventBot) Do() {
 }
 
 func (bot EventBot) Run(duration time.Duration) {
-	t := time.NewTicker(duration)
-	defer t.Stop()
-
-	for {
-		<-t.C
-		bot.Do()
-	}
+	time.Sleep(duration)
+	log.Println("[Github] [Push] [Bot] [TODO]")
+	bot.Do()
+	log.Println("[Github] [Push] [Bot] [Done]")
 }
 
 func NewBot(groupName string) githubbot.GithubBot {

@@ -9,9 +9,6 @@ type GithubBot interface {
 
 type GBS []GithubBot
 
-func (gbs GBS) Append(bot GithubBot) {
-	if gbs == nil {
-		gbs = GBS{}
-	}
-	gbs = append(gbs, bot)
+func (gbs *GBS) Append(bot GithubBot) {
+	*gbs = append(*gbs, bot)
 }
