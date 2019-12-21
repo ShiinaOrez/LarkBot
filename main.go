@@ -14,6 +14,6 @@ func main() {
 	repoBot := trending.NewBot("go")
 	githubBotTimeTable.Append(repoBot, 10)
 
-	githubBotTimeTable.Register()
 	githubBotTimeTable.Run()
+	defer githubBotTimeTable.Close()
 }

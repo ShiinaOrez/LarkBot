@@ -7,15 +7,15 @@ import (
 )
 
 type Worker struct {
-	Bot githubbot.GithubBot
-	Fd  time.Duration
+	Bot       githubbot.GithubBot
+	StartHour int
+	Fd        time.Duration
 }
 
-type Workers []Worker
-
 type TimeTable struct {
-	Map     map[int]*githubbot.GBS
-	Workers *Workers
+	Map map[int]*githubbot.GBS
+	// Mission Queue
+	MQ *chan Worker
 }
 
 func getDuration(startHour int) time.Duration {
@@ -43,19 +43,19 @@ func getDuration(startHour int) time.Duration {
 	return dHour + dMinute + dSecond
 }
 
-func (w Worker) Run() {
+func (w Worker) Run(mq *chan Worker) {
 	w.Bot.Run(w.Fd)
-	for {
-		w.Bot.Run(time.Hour * 24)
+	newFd := getDuration(w.StartHour)
+	*mq <- Worker{
+		Bot:       w.Bot,
+		StartHour: w.StartHour,
+		Fd:        newFd,
 	}
 }
 
-func (ws *Workers) Append(worker Worker) {
-	*ws = append(*ws, worker)
-}
-
 func NewTimeTable() TimeTable {
-	return TimeTable{Map: make(map[int]*githubbot.GBS), Workers: &Workers{}}
+	mq := make(chan Worker, 10)
+	return TimeTable{Map: make(map[int]*githubbot.GBS), MQ: &mq}
 }
 
 func (tt *TimeTable) Append(bot githubbot.GithubBot, startHour int) {
@@ -72,19 +72,23 @@ func (tt TimeTable) Register() {
 		duration := getDuration(startHour)
 		for _, githubBot := range *gbs {
 			log.Println("[TimeTable] [Register] [Bot]")
-			tt.Workers.Append(Worker{
-				Bot: githubBot,
-				Fd:  duration,
-			})
+			*tt.MQ <- Worker{
+				Bot:       githubBot,
+				Fd:        duration,
+				StartHour: startHour,
+			}
 		}
 	}
 }
 
 func (tt TimeTable) Run() {
-	for _, worker := range *tt.Workers {
-		log.Println("[Worker] [Start]")
-		go worker.Run()
+	tt.Register()
+	for worker := range *tt.MQ {
+		log.Println("[TimeTable] [MQ] [Consume] [Bot]")
+		go worker.Run(tt.MQ)
 	}
-	// 睡一年
-	time.Sleep(time.Hour * 24 * 30 * 12)
+}
+
+func (tt TimeTable) Close() {
+	close(*tt.MQ)
 }
