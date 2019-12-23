@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	lark "github.com/ShiinaOrez/LarkBot/bot"
-	"github.com/ShiinaOrez/LarkBot/constvar"
+	"github.com/ShiinaOrez/LarkBot/conf"
 	"log"
 	"net/http"
 	"time"
@@ -81,7 +81,7 @@ func (bot RepoBot) Do() {
 	for index, repo := range repos {
 		appendText := fmt.Sprintf(
 			"%s[TOP%d]: %s\n    作者:%s\n    增长Star数:%d\n    总Star数:%d\n    总Fork数:%d\n    传送门:%s\n",
-			constvar.NumberToEmoji[index+1],
+			conf.C.NumberToEmoji[index+1],
 			index+1,
 			repo.Name,
 			repo.Author,
@@ -119,6 +119,6 @@ func NewBot(language string) RepoBot {
 	return RepoBot{
 		Language:    language,
 		Client:      &http.Client{},
-		WebHookList: constvar.WebHooks["github"][language],
+		WebHookList: conf.C.Webhooks.Github.Trending[language],
 	}
 }

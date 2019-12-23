@@ -39,7 +39,7 @@ func getDuration(startHour int) time.Duration {
 	if dHour < 0 {
 		dHour += 24 * time.Hour
 	}
-	log.Printf("Bot will firstly run after %d hours %d mins %d seconds\n", dHour/time.Hour, dMinute/time.Minute, dSecond/time.Second)
+	log.Printf("Time: %d'o Clock bots will firstly run after %d hours %d mins %d seconds\n", startHour, dHour/time.Hour, dMinute/time.Minute, dSecond/time.Second)
 	return dHour + dMinute + dSecond
 }
 

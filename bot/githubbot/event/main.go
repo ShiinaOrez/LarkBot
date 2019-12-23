@@ -6,7 +6,7 @@ import (
 	"fmt"
 	lark "github.com/ShiinaOrez/LarkBot/bot"
 	"github.com/ShiinaOrez/LarkBot/bot/githubbot"
-	"github.com/ShiinaOrez/LarkBot/constvar"
+	"github.com/ShiinaOrez/LarkBot/conf"
 	"log"
 	"net/http"
 	"sort"
@@ -168,8 +168,8 @@ func (bot EventBot) Run(duration time.Duration) {
 
 func NewBot(groupName string) githubbot.GithubBot {
 	return EventBot{
-		TargetUserList: constvar.GroupUsersMap[groupName],
+		TargetUserList: conf.C.GroupUsersMap[groupName],
 		Client:         &http.Client{},
-		WebHookList:    constvar.WebHooks["github"]["push"],
+		WebHookList:    conf.C.Webhooks.Github.Event.Push,
 	}
 }

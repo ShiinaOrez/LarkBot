@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/ShiinaOrez/LarkBot/bot/githubbot/trending"
+	_ "github.com/ShiinaOrez/LarkBot/conf"
 	"github.com/ShiinaOrez/LarkBot/timeTable"
 )
 
