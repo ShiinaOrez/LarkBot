@@ -119,6 +119,6 @@ func NewBot(language string) RepoBot {
 	return RepoBot{
 		Language:    language,
 		Client:      &http.Client{},
-		WebHookList: constvar.WebHooks["trending"],
+		WebHookList: constvar.WebHooks["github"][language],
 	}
 }

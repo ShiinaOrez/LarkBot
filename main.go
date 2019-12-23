@@ -11,8 +11,14 @@ func main() {
 	// githubBot := event.NewBot("backend")
 	// githubBotTimeTable.Append(githubBot, 20)
 
-	repoBot := trending.NewBot("go")
-	githubBotTimeTable.Append(repoBot, 10)
+	goRepoBot := trending.NewBot("go")
+	githubBotTimeTable.Append(goRepoBot, 10)
+
+	javaRepoBot := trending.NewBot("java")
+	githubBotTimeTable.Append(javaRepoBot, 10)
+
+	kotRepoBot := trending.NewBot("kotlin")
+	githubBotTimeTable.Append(kotRepoBot, 10)
 
 	githubBotTimeTable.Run()
 	defer githubBotTimeTable.Close()

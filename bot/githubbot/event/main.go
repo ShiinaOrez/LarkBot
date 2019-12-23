@@ -170,6 +170,6 @@ func NewBot(groupName string) githubbot.GithubBot {
 	return EventBot{
 		TargetUserList: constvar.GroupUsersMap[groupName],
 		Client:         &http.Client{},
-		WebHookList:    constvar.WebHooks["push"],
+		WebHookList:    constvar.WebHooks["github"]["push"],
 	}
 }

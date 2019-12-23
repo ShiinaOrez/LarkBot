@@ -1,8 +1,8 @@
 package constvar
 
-var GroupUsersMap map[string][]string = make(map[string][]string)
-var WebHooks map[string][]string = make(map[string][]string)
-var NumberToEmoji map[int]string = map[int]string{
+var GroupUsersMap = make(map[string][]string)
+var WebHooks = make(map[string]map[string][]string)
+var NumberToEmoji = map[int]string{
 	1: "🤓",
 	2: "🤩",
 	3: "😝",
@@ -24,10 +24,18 @@ func init() {
 		"kocoler",       // 张军洁
 		"JacksieCheung", // 张竣淇
 	}
-	WebHooks["push"] = []string{
-		"https://open.feishu.cn/open-apis/bot/hook/98fc59eb14d2405e880a6ab0fe70d136",
-	}
-	WebHooks["trending"] = []string{
-		"https://open.feishu.cn/open-apis/bot/hook/cb973deacb4a4ee699d8d049c51e6908",
+	WebHooks["github"] = map[string][]string{
+		"push": {
+			"https://open.feishu.cn/open-apis/bot/hook/98fc59eb14d2405e880a6ab0fe70d136",
+		},
+		"go": {
+			"https://open.feishu.cn/open-apis/bot/hook/cb973deacb4a4ee699d8d049c51e6908",
+		},
+		"java": {
+			"https://open.feishu.cn/open-apis/bot/hook/0c2f9f5bb48849bda64cd25ebc9f87e1",
+		},
+		"kotlin": {
+			"https://open.feishu.cn/open-apis/bot/hook/0c2f9f5bb48849bda64cd25ebc9f87e1",
+		},
 	}
 }
