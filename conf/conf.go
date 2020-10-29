@@ -2,9 +2,10 @@ package conf
 
 import (
 	"fmt"
-	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
+
+	"gopkg.in/yaml.v2"
 )
 
 type Event struct {
@@ -12,6 +13,7 @@ type Event struct {
 }
 
 type Github struct {
+	Fitness  []string            `yaml:"fitness"`
 	Trending map[string][]string `yaml:"trending"`
 	Event    Event               `yaml:"event"`
 }

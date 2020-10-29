@@ -1,9 +1,10 @@
 package timeTable
 
 import (
-	"github.com/ShiinaOrez/LarkBot/bot/githubbot"
 	"log"
 	"time"
+
+	"github.com/ShiinaOrez/LarkBot/bot/githubbot"
 )
 
 type Worker struct {
@@ -59,6 +60,10 @@ func NewTimeTable() TimeTable {
 }
 
 func (tt *TimeTable) Append(bot githubbot.GithubBot, startHour int) {
+	if startHour == -1 {
+		bot.Do()
+		return
+	}
 	if _, ok := tt.Map[startHour]; !ok {
 		tt.Map[startHour] = &githubbot.GBS{bot}
 	} else {
@@ -82,6 +87,9 @@ func (tt TimeTable) Register() {
 }
 
 func (tt TimeTable) Run() {
+	if len(tt.Map) == 0 {
+		return
+	}
 	tt.Register()
 	for worker := range *tt.MQ {
 		log.Println("[TimeTable] [MQ] [Consume] [Bot]")

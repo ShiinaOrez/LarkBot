@@ -4,11 +4,12 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	lark "github.com/ShiinaOrez/LarkBot/bot"
-	"github.com/ShiinaOrez/LarkBot/conf"
 	"log"
 	"net/http"
 	"time"
+
+	lark "github.com/ShiinaOrez/LarkBot/bot"
+	"github.com/ShiinaOrez/LarkBot/conf"
 )
 
 type RepoBot struct {
